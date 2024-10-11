@@ -612,7 +612,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   get _shouldSyncWindows() {
-    return Services.prefs.getBoolPref('zen.workspaces.sync-windows', false);
+    return Services.prefs.getBoolPref('zen.workspaces.windows-sync-active-workspace', false);
   }
 
   async changeWorkspace(window, onInit = false) {
