@@ -178,10 +178,9 @@
             delete tab._zenClickEventListener;
           }
           break;
-          // TODO: Do this in a better way. Closing a second window could trigger remove tab and delete it from db
-        // case "TabClose":
-        //   this._removePinnedAttributes(tab);
-        //   break;
+        case "TabClose":
+          this._removePinnedAttributes(tab);
+          break;
         default:
           console.warn('ZenPinnedTabManager: Unhandled tab event', action);
           break;
@@ -189,8 +188,8 @@
     }
 
     _onTabClick(e) {
-      const tab = e.target;
-      if (e.button === 1) {
+      const tab = e.target?.closest("tab");
+      if (e.button === 1 && tab) {
         this._onCloseTabShortcut(e, tab);
       }
     }
@@ -393,7 +392,7 @@
 
       const element = window.MozXULElement.parseXULToFragment(`
             <menuitem id="context_zen-pin-tab-global"
-                      data-lazy-l10n-id="pin-tab-global"
+                      data-lazy-l10n-id="tab-context-zen-pin-tab-global"
                       hidden="true"
                       oncommand="gZenPinnedTabManager._addGlobalPin();"/>   
         `);
@@ -413,7 +412,7 @@
       const isVisible = contextTab.pinned  && !contextTab.multiselected;
       document.getElementById("context_zen-reset-pinned-tab").hidden = !isVisible || !contextTab.getAttribute("zen-pin-id");
       document.getElementById("context_zen-replace-pinned-url-with-current").hidden = !isVisible;
-      document.getElementById("context_zen-pin-tab-global").hidden = contextTab.pinned;
+      document.getElementById("context_zen-pin-tab-global").hidden = contextTab.pinned || !ZenWorkspaces.workspaceEnabled;
       document.getElementById("context_zen-pinned-tab-separator").hidden = !isVisible;
     }
   }
